@@ -30,7 +30,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -225,12 +231,21 @@ public class register extends AppCompatActivity{
                 String serverAddress = "192.168.43.10";
                 int serverPort = 12345;
                 Socket socket = new Socket(serverAddress,serverPort);
-                DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-                dOut.writeBytes(mEmail);
-                dOut.flush();
-                dOut.writeBytes(mPassword);
-                dOut.flush();
-                dOut.close();
+                OutputStream os = socket.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(os);
+                BufferedWriter bw = new BufferedWriter(osw);
+
+                bw.write(mEmail);
+                bw.write(mPassword);
+                bw.flush();
+
+                InputStream is = socket.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                String message = br.readLine();
+                Log.i("bitch",message);
+
+                socket.close();
             }
             catch (java.net.UnknownHostException a)
             {
