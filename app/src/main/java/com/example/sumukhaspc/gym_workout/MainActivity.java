@@ -7,11 +7,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 
 public class MainActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener {
@@ -65,5 +71,42 @@ public class MainActivity extends AppCompatActivity implements Imageutils.ImageA
 
         String path = Environment.getExternalStorageDirectory() + File.separator + "ImageAttach" + File.separator;
         imageutils.createImage(file, filename, path, false);
+    }
+
+    private boolean contact_server() {
+        try {
+            String serverAddress = "192.168.43.10";
+            int serverPort = 12345;
+            Socket socket = new Socket(serverAddress, serverPort);
+            OutputStream os = socket.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            BufferedWriter bw = new BufferedWriter(osw);
+
+            bw.write("one");
+            bw.write("/0");
+            bw.write("/0");
+            bw.flush();
+
+            InputStream is = socket.getInputStream();
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                String output = new String(buffer, 0, read);
+                if (output.equals("True"))
+                    return true;
+                else if (output.equals(("False")))
+                    return false;
+            }
+
+
+            socket.close();
+        } catch (java.net.UnknownHostException a) {
+            Log.i("error", "java.net.UnknownHostException");
+        } catch (java.io.IOException b) {
+            Log.i("error", "java.io.IOException");
+        }
+//        TODO: chceck the below line only added return TRUE for deafult since it was throwing an error!
+        return true;
+
     }
 }
