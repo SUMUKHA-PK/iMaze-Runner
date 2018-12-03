@@ -236,23 +236,28 @@ public class register extends AppCompatActivity{
                 BufferedWriter bw = new BufferedWriter(osw);
 
                 bw.write(mEmail);
+                bw.write("/0");
                 bw.write(mPassword);
                 bw.flush();
 
                 InputStream is = socket.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String message = br.readLine();
-                Log.i("bitch",message);
+                byte[] buffer = new byte[1024];
+                int read;
+                while((read = is.read(buffer)) != -1) {
+                    String output = new String(buffer, 0, read);
+                    if(output.equals("True"))
+                        return true;
+                }
+
 
                 socket.close();
             }
             catch (java.net.UnknownHostException a)
             {
-                Log.i("yo","srrf");
+                Log.i("error","java.net.UnknownHostException");
             }
             catch (java.io.IOException b){
-                Log.i("yo","srrf");
+                Log.i("error","java.io.IOException");
             }
 
             return true;
@@ -264,7 +269,8 @@ public class register extends AppCompatActivity{
             showProgress(false);
 
             if (success) {
-                finish();
+                Snackbar snackbar = Snackbar.make(findViewById(R.id.myCoordinatorLayout),"Registered Successfully! Press back to continue.",Snackbar.LENGTH_LONG);
+                snackbar.show();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
