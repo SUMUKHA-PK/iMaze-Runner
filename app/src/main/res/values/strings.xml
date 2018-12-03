@@ -13,4 +13,5 @@
         completions."
     </string>
     <string name="title_activity_register">create_register</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

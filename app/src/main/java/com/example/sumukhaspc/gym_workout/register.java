@@ -147,13 +147,13 @@ public class register extends AppCompatActivity{
             return false;
         int f_caps= 0,f_small=0,f_num=0;
         for(int i =0;i<password.length();i++){
-            if((password.charAt(i)<'Z')&&(password.charAt(i)>'A')){
+            if((password.charAt(i)<='Z')&&(password.charAt(i)>='A')){
                 f_caps=1;
             }
-            if((password.charAt(i)<'z')&&(password.charAt(i)>'a')){
+            if((password.charAt(i)<='z')&&(password.charAt(i)>='a')){
                 f_small=1;
             }
-            if((password.charAt(i)<'9')&&(password.charAt(i)>'0')){
+            if((password.charAt(i)<='9')&&(password.charAt(i)>='0')){
                 f_num=1;
             }
         }
@@ -235,6 +235,8 @@ public class register extends AppCompatActivity{
                 OutputStreamWriter osw = new OutputStreamWriter(os);
                 BufferedWriter bw = new BufferedWriter(osw);
 
+                bw.write("zero");
+                bw.write("/0");
                 bw.write(mEmail);
                 bw.write("/0");
                 bw.write(mPassword);
@@ -247,6 +249,8 @@ public class register extends AppCompatActivity{
                     String output = new String(buffer, 0, read);
                     if(output.equals("True"))
                         return true;
+                    else if(output.equals(("False")))
+                        return false;
                 }
 
 
@@ -272,7 +276,7 @@ public class register extends AppCompatActivity{
                 Snackbar snackbar = Snackbar.make(findViewById(R.id.myCoordinatorLayout),"Registered Successfully! Press back to continue.",Snackbar.LENGTH_LONG);
                 snackbar.show();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError("Already registered");
                 mPasswordView.requestFocus();
             }
         }
