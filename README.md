@@ -11,3 +11,4 @@ Steps to reproduce:
 * Run the python script in Server directory.
 * Use android studio to install the application.
 * Ensure both devices are on the same host and update this IP in both ```LoginActivity``` and in ```server.py```
+* Setup a MySQL server with table ```credentials``` withe fields ```username``` (as PK) and ```password```
