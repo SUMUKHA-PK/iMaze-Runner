@@ -1,34 +1,29 @@
 import mysql.connector
 
 def add_cred(credentials):
-    try:
-        print("add_cred called")
-        server = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="temp"
-        )
-        print("config done for mySQL");
-        username = credentials[1]
-        password = credentials[2]
+    server = mysql.connector.connect(
+    host="localhost",
+    user="server_db",
+    passwd="password",
+    database="server_data"
+    )
 
-        mycursor = server.cursor()
+    username = credentials[1]
+    password = credentials[2]
 
-        query = "INSERT INTO credentials VALUES(\""+username+"\",\""+password+"\")"
-        print("INSERTING INTO DATABASE")
+    mycursor = server.cursor()
+    
+    query = "INSERT INTO credentials VALUES(\""+username+"\",\""+password+"\")"
 
-        mycursor.execute(query)
-        server.commit()
-    except Exception as e:
-        print(e)
-        
+    mycursor.execute(query)
+    server.commit()
+
 def authenticate(credentials):
     server = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="",
-    database="temp"
+    user="server_db",
+    passwd="password",
+    database="server_data"
     )
 
     username = credentials[1]
@@ -49,5 +44,3 @@ def authenticate(credentials):
         return False
     else:
         return True
-
-
