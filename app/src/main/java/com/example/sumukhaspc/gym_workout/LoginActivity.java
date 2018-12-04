@@ -73,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+//        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+//        startActivity(intent);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -290,7 +292,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
             try{
                 String serverAddress = MainActivity.PYTHON_SERVER_IP;
-                int serverPort = MainActivity.PYTHON_SERVER_PORT;
+                int serverPort = MainActivity.PYTHON_SERVER_HANDSHAKE_PORT;
                 Socket socket = new Socket(serverAddress,serverPort);
                 OutputStream os = socket.getOutputStream();
                 OutputStreamWriter osw = new OutputStreamWriter(os);
