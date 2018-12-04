@@ -52,13 +52,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -264,7 +257,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         };
 
         int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
 
     /**
@@ -276,7 +268,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
 
-            UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
         }
@@ -293,6 +285,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try{
                 String serverAddress = MainActivity.PYTHON_SERVER_IP;
                 int serverPort = MainActivity.PYTHON_SERVER_HANDSHAKE_PORT;
+
                 Socket socket = new Socket(serverAddress,serverPort);
                 OutputStream os = socket.getOutputStream();
                 OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -322,11 +315,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             catch (java.net.UnknownHostException a)
             {
                 Log.i("error","java.net.UnknownHostException");
-                a.printStackTrace();
             }
             catch (java.io.IOException b){
                 Log.i("error","java.io.IOException");
-                b.printStackTrace();
             }
 
             return true;
