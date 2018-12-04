@@ -5,10 +5,10 @@ import io
 import threading
 from db import add_cred
 from db import authenticate as auth
-from PIL import Image
-from PIL import ImageFile
-ImageFile.LOAD_TRUNCATED_IMAGES = True
-SERVER_IP="192.168.43.125"
+from time import gmtime,strftime
+
+# ImageFile.LOAD_TRUNCATED_IMAGES = True
+SERVER_IP="192.168.43.10"
 SERVER_PORT_LOGIN=12346
 SERVER_PORT_FILES=12345
 
@@ -22,24 +22,28 @@ class FileThread(threading.Thread):
         server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         serverAddress = SERVER_IP
         serverPort = SERVER_PORT_FILES
-        server_sock.bind((serverAddress,serverPort))
+        try:
+            server_sock.bind((serverAddress,serverPort))
+        except Exception as e:
+            print(e)
+
         server_sock.listen(10)
         size = 4096
         while True:
             client,addr = server_sock.accept()
             print("client connected for files")
             #this below must be changed to the image name
-            file_path = "./images/some.jpg"
+            cur_time = str(strftime("%Y-%m-%d %H:%M:%S", gmtime())).replace(" ","_").replace(":","_")
+            file_path = "./images/"+cur_time+".jpg"
             directory = os.path.dirname(file_path)
             if not os.path.exists(directory):
                 os.makedirs(directory)
-            myfile=open('./images/some.jpg','wb')
+            myfile=open(file_path,'wb')
             while True:
                 data=client.recv(size)
                 if not data:
                     break
                 myfile.write(data)
-                print("writing the file")
             myfile.close()
             client.close()
             print("done")
@@ -55,7 +59,10 @@ class LoginRegisterThread(threading.Thread):
         server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         serverAddress = SERVER_IP
         serverPort = SERVER_PORT_LOGIN
-        server_sock.bind((serverAddress,serverPort))
+        try:
+            server_sock.bind((serverAddress,serverPort))
+        except Exception as e:
+            print(e)
         server_sock.listen(10)
         while True:
             conn,addr = server_sock.accept()

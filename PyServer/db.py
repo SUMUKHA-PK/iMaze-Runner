@@ -5,11 +5,11 @@ def add_cred(credentials):
         print("add_cred called")
         server = mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="",
-        database="temp"
+        user="server_db",
+        password="password",
+        database="server_data"
         )
-        print("config done for mySQL");
+        print("config done for mySQL")
         username = credentials[1]
         password = credentials[2]
 
@@ -26,9 +26,9 @@ def add_cred(credentials):
 def authenticate(credentials):
     server = mysql.connector.connect(
     host="localhost",
-    user="root",
-    password="",
-    database="temp"
+    user="server_db",
+    password="password",
+    database="server_data"
     )
 
     username = credentials[1]
