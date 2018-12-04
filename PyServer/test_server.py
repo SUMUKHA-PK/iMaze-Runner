@@ -6,11 +6,18 @@ import threading
 from db import add_cred
 from db import authenticate as auth
 from time import gmtime,strftime
+import signal
+import random
 
 SERVER_IP="192.168.43.10"
 SERVER_PORT_LOGIN=12346
-SERVER_PORT_FILES=12345
+SERVER_PORT_CRED=12345
 FILE_SIZE = 8192
+
+def signal_handler(signal,frame):
+    global isInterrupted
+    isInterrupted = True
+
 
 class FileThread(threading.Thread):
     def __init__(self,threadID, name):
@@ -38,6 +45,8 @@ class FileThread(threading.Thread):
             if not os.path.exists(directory):
                 os.makedirs(directory)
             myfile=open(file_path,'wb')
+            signal.signal(signal.SIGINT, signal_handler)
+
             while True:
                 data=client.recv(FILE_SIZE)
                 if not data:
@@ -46,8 +55,11 @@ class FileThread(threading.Thread):
             myfile.close()
             
             # Open matlab, run the script for this image and get results, send back to client
+
             client.close()
-            print("done")
+            if isInterrupted:
+                print("imageReceiver server shutting down")
+                break
 
 class LoginRegisterThread(threading.Thread):
     def __init__(self,threadID,name):
@@ -65,6 +77,8 @@ class LoginRegisterThread(threading.Thread):
         except Exception as e:
             print(e)
         server_sock.listen(10)
+
+
         while True:
             conn,addr = server_sock.accept()
             print("client connected for login/register")
@@ -76,6 +90,7 @@ class LoginRegisterThread(threading.Thread):
             out = str(result).encode()
             conn.send(out)
             print(out)
+            
 
     def process(self,data):
     # Basically this must check the hash of the password (currently just match strings and return a value)
@@ -98,8 +113,22 @@ class LoginRegisterThread(threading.Thread):
 
 
 def main():
-    print("Attempting to start the servers\n")
-    
+
+    cur_threads = []
+    while True:
+        thread_no = random.randint(1,1000)
+        
+        file_server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        cred_server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+        file_server_sock.bind((SERVER_IP,SERVER_PORT_FILES))
+        cred_server_sock.bind((SERVER_IP,SERVER_PORT_CRED))
+
+        signal.signal(signal.SIGINT, signal_handler)
+        if isInterrupted:
+                print("Server shutting down!")
+                break
+
     files = FileThread(1, "FT")
     loginRegister = LoginRegisterThread(2, "LR")
 
