@@ -29,6 +29,10 @@ class FileThread(threading.Thread):
             client,addr = server_sock.accept()
             print("client connected for files")
             #this below must be changed to the image name
+            file_path = "./images/some.jpg"
+            directory = os.path.dirname(file_path)
+            if not os.path.exists(directory):
+                os.makedirs(directory)
             myfile=open('./images/some.jpg','wb')
             while True:
                 data=client.recv(size)
