@@ -4,7 +4,7 @@ from db import add_cred
 from db import authenticate as auth
 server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-serverAddress = "192.168.43.125"
+serverAddress = "192.168.43.10"
 serverPort = 12345
 
 server_sock.bind((serverAddress,serverPort))
