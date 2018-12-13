@@ -41,6 +41,9 @@ class FileThread(threading.Thread):
             if not self.data:
                 break
             myfile.write(self.data)
+            self.data = self.conn.recv(SIZE)
+            print("Writing")
+        print("Image transferred!")
         myfile.close()
 
         self.conn.close()
@@ -88,14 +91,6 @@ class LoginRegisterThread(threading.Thread):
                 return result
         except Exception as e:
             print("Decoding error in process:",e)
-
-def call_cred_thread(threadID,name,conn,addr,data):
-    files = FileThread(threadID,name,conn,addr,data)
-    files.start()
-
-def call_file_thread(threadID,name,conn,addr,data):
-    cred = LoginRegisterThread(threadID,name,conn,addr,data)
-    cred.start()
 
 def check_dest(data):
     try:
