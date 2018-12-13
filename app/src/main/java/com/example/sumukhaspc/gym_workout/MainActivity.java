@@ -24,8 +24,7 @@ import java.net.Socket;
 public class MainActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener {
 
     static public String PYTHON_SERVER_IP = "192.168.43.10";
-    static public int PYTHON_SERVER_HANDSHAKE_PORT = 12346;
-    static public int PYTHON_SERVER_FILE_PORT = 12345;
+    static public int PYTHON_SERVER_PORT = 12345;
 
 
     ImageView iv_attachment;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements Imageutils.ImageA
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                TODO: post the image to server on the click of the button
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements Imageutils.ImageA
                     }
                 });
                 thread.start();
-                startActivity(new Intent(MainActivity.this,process.class));
+               // startActivity(new Intent(MainActivity.this,process.class));
             }
         });
 
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements Imageutils.ImageA
 
 
         try {
-            socket = new Socket(MainActivity.PYTHON_SERVER_IP, MainActivity.PYTHON_SERVER_FILE_PORT);
+            socket = new Socket(MainActivity.PYTHON_SERVER_IP, MainActivity.PYTHON_SERVER_PORT);
             while (true) {
 
 

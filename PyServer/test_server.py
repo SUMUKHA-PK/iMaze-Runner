@@ -10,9 +10,8 @@ import signal
 import random
 
 SERVER_IP="192.168.43.10"
-SERVER_PORT_LOGIN=12346
-SERVER_PORT_FILES=12345
-SIZE = 8192
+SERVER_PORT = 12345
+SIZE = 4096
 
 def signal_handler(signal,frame):
     global isInterrupted
@@ -75,13 +74,13 @@ class LoginRegisterThread(threading.Thread):
     # Basically this must check the hash of the password (currently just match strings and return a value)
         try:
             credentials = data.decode().split("/0")
-            if(credentials[0]=="zero"):
+            if(credentials[0]=="register"):
                 try:
                     add_cred(credentials)
                 except:
                     return False
                 return True
-            elif(credentials[0]=="one"):
+            elif(credentials[0]=="login"):
                 try:
                     result = auth(credentials)
                 except:
@@ -99,12 +98,13 @@ def call_file_thread(threadID,name,conn,addr,data):
     cred.start()
 
 def check_dest(data):
-    input = data.decode().split("/0")
-    if((input[0]=="zero")|(input[0]=="one")):
-        return "cred"
-    # elif(input[0]=="file"):
-    else:
+    try:
+        input = data.decode().split("/0")
+        if((input[0]=="register")|(input[0]=="login")):
+            return "cred"
+    except Exception as e:
         return "file"
+
 
 def call_thread(threadID,conn,addr):
     data = conn.recv(SIZE)
@@ -113,6 +113,7 @@ def call_thread(threadID,conn,addr):
         cred = LoginRegisterThread(threadID,"LR",conn,addr,data)
         cred.start()
     elif(result == "file"):
+        print("Came2")
         files = FileThread(threadID,"FT",conn,addr,data)
         files.start()
 
@@ -122,7 +123,7 @@ def main():
     server_sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 
     try: 
-        server_sock.bind((SERVER_IP,SERVER_PORT_LOGIN))
+        server_sock.bind((SERVER_IP,SERVER_PORT))
     except Exception as e:
         print(e)
     
@@ -132,6 +133,7 @@ def main():
 
     while True :
         print("nothing happenning") 
+        conn = None
         conn,addr = server_sock.accept()
 
         print("Accepting stage")
@@ -145,4 +147,4 @@ def main():
         print(cur_threads)
 
 if __name__ == "__main__":
-    main()9
+    main()
