@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements Imageutils.ImageA
                     }
                 });
                 thread.start();
-               // startActivity(new Intent(MainActivity.this,process.class));
+                startActivity(new Intent(MainActivity.this,process.class));
             }
         });
 
