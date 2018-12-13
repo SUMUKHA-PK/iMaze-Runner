@@ -288,7 +288,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 OutputStreamWriter osw = new OutputStreamWriter(os);
                 BufferedWriter bw = new BufferedWriter(osw);
 
-                bw.write("one");
+                bw.write("login");
                 bw.write("/0");
                 bw.write(mEmail);
                 bw.write("/0");

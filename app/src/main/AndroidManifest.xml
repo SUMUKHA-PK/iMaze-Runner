@@ -44,6 +44,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.sumukhaspc.gym_workout.LoginActivity" />
         </activity>
+        <activity
+            android:name=".process"
+            android:label="@string/title_activity_process"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sumukhaspc.gym_workout.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

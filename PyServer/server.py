@@ -20,6 +20,7 @@ class FileThread(threading.Thread):
     def run(self):
         print("imageReceiver server is running\n")
         server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        server_sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
         serverAddress = SERVER_IP
         serverPort = SERVER_PORT_FILES
         try:
@@ -33,7 +34,7 @@ class FileThread(threading.Thread):
             client,addr = server_sock.accept()
             print("client connected for sending files")
             cur_time = str(strftime("%Y-%m-%d %H:%M:%S", gmtime())).replace(" ","_").replace(":","_")
-            file_path = "./images/"+cur_time+".jpg"
+            file_path = "./images/"+cur_time+".png"
             directory = os.path.dirname(file_path)
             if not os.path.exists(directory):
                 os.makedirs(directory)
@@ -58,6 +59,7 @@ class LoginRegisterThread(threading.Thread):
     def run(self):
         print("handshake server is running\n")
         server_sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        server_sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
         serverAddress = SERVER_IP
         serverPort = SERVER_PORT_LOGIN
         try:
@@ -81,18 +83,18 @@ class LoginRegisterThread(threading.Thread):
     # Basically this must check the hash of the password (currently just match strings and return a value)
         try:
             credentials = data.decode().split("/0")
-            if(credentials[0]=="zero"):
+            if(credentials[0]=="register"):
                 try:
                     add_cred(credentials)
                 except:
                     return False
                 return True
-            elif(credentials[0]=="one"):
+            elif(credentials[0]=="login"):
                 try:
                     result = auth(credentials)
                 except:
                     return False
-                return result
+                return result        
         except Exception as e:
             print("Decoding error in process:",e)
 

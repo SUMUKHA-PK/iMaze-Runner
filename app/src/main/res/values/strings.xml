@@ -14,4 +14,5 @@
     </string>
     <string name="title_activity_register">create_register</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_process">process</string>
 </resources>

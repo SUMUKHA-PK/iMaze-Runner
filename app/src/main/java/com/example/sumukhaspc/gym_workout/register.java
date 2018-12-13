@@ -235,7 +235,7 @@ public class register extends AppCompatActivity{
                 OutputStreamWriter osw = new OutputStreamWriter(os);
                 BufferedWriter bw = new BufferedWriter(osw);
 
-                bw.write("zero");
+                bw.write("register");
                 bw.write("/0");
                 bw.write(mEmail);
                 bw.write("/0");
