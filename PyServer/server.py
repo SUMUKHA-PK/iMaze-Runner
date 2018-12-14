@@ -1,6 +1,7 @@
 import socket 
 import pickle
 import os
+import sys
 import io
 import threading
 from db import add_cred
@@ -8,6 +9,14 @@ from db import authenticate as auth
 from time import gmtime,strftime
 import signal
 import random
+from pathlib import Path
+
+path_to_script = 'D:\\ACADEMICS\\NTC-1819-MiniProject-16CO145-234\\src\\Analysis'
+sys.path.append(path_to_script)
+
+print(sys.path)
+
+from EAMRSA_Test import script
 
 SERVER_IP="192.168.43.10"
 SERVER_PORT = 12345
@@ -61,7 +70,7 @@ class LoginRegisterThread(threading.Thread):
         print("DATA received:\n_____________________")
         print(self.data)
         print("_________________________")
-        result = self.process(self.data)
+        result = self.process()
         out = str(result).encode()
         self.conn.send(out)
         print(out)
@@ -70,9 +79,9 @@ class LoginRegisterThread(threading.Thread):
         cur_threads.remove(self.threadID)
         
 
-    def process(self,data):
+    def process(self):
         try:
-            credentials = data.decode().split("/0")
+            credentials = self.data.decode().split("/0")
             if(credentials[0]=="register"):
                 try:
                     add_cred(credentials)
@@ -88,11 +97,35 @@ class LoginRegisterThread(threading.Thread):
         except Exception as e:
             print("Decoding error in process:",e)
 
+class ActionThread(threading.Thread):
+
+    def __init__(self,threadID,name,conn,addr,data,result):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.conn = conn
+        self.addr = addr
+        self.data = data
+        self.result = result
+
+    def run(self):
+        print("Action working!")
+        if(self.result=="action1"):
+            script.runner()
+        elif(self.result=="action2"):
+            
+        self.conn.close()
+        cur_threads.remove(self.threadID)
+
 def check_dest(data):
     try:
         input = data.decode().split("/0")
         if((input[0]=="register")|(input[0]=="login")):
             return "cred"
+        elif((input[0]=="action1")):
+            return "action1"
+        elif((input[0]=="action2")):
+            return "action2"
     except Exception as e:
         return "file"
 
@@ -106,6 +139,10 @@ def call_thread(threadID,conn,addr):
     elif(result == "file"):
         files = FileThread(threadID,"FT",conn,addr,data)
         files.start()
+    elif((result == "action1")|(result=="action2")):
+        print("ACTION")
+        action = ActionThread(threadID,"AC",conn,addr,data,result)
+        action.start()
 
 def main():
 
@@ -138,3 +175,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+    
