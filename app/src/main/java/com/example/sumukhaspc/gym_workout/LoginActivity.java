@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private UserLoginTask mAuthTask = null;
 
+    public static String IP = "";
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -95,6 +96,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        EditText get_IP = (EditText)findViewById(R.id.IP);
+
+        IP = get_IP.getText().toString();
     }
 
     private void populateAutoComplete() {

@@ -23,7 +23,7 @@ import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements Imageutils.ImageAttachmentListener {
 
-    static public String PYTHON_SERVER_IP = "192.168.43.10";
+    static public String PYTHON_SERVER_IP = "192.168.43.10";//LoginActivity.IP;
     static public int PYTHON_SERVER_PORT = 12345;
 
 

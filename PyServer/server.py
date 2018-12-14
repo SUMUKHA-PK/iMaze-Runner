@@ -112,8 +112,6 @@ class ActionThread(threading.Thread):
         print("Action working!")
         if(self.result=="action1"):
             script.runner()
-        elif(self.result=="action2"):
-            
         self.conn.close()
         cur_threads.remove(self.threadID)
 
