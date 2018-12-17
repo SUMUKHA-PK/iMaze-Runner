@@ -13,6 +13,7 @@ This is written in python(just because its easy, wish to write an ERLANG server 
 * The value of the server IP is not hardcoded, it has a feature which allows the client to ping and the server responds so that the client can register a running server.
 <br>
 <br>
+
 **The database :** Is a MySQL database that holds all the registered user credentials. Supports hashed values upto 256 bits. 
 <br>
 <br>
