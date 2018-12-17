@@ -73,7 +73,7 @@ public class process extends AppCompatActivity {
     public String perform_actions(String action) {
         String result = "";
         try {
-            String serverAddress = MainActivity.PYTHON_SERVER_IP;
+            String serverAddress = LoginActivity.IP;
             int serverPort = MainActivity.PYTHON_SERVER_PORT;
             Socket socket = new Socket(serverAddress, serverPort);
             OutputStream os = socket.getOutputStream();

@@ -228,7 +228,7 @@ public class register extends AppCompatActivity{
             }
 
             try{
-                String serverAddress = MainActivity.PYTHON_SERVER_IP;
+                String serverAddress = LoginActivity.IP;
                 int serverPort = MainActivity.PYTHON_SERVER_PORT;
                 Socket socket = new Socket(serverAddress,serverPort);
                 OutputStream os = socket.getOutputStream();

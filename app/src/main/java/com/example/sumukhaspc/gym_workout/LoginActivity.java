@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (isResponse(InetAddress.getByName(host)).equals("true")){
                     Log.i("errorman",host);
                     ipObtained=1;
+                    IP = host;
                     return;
                 }
             }
@@ -344,7 +345,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
             try{
-                String serverAddress = MainActivity.PYTHON_SERVER_IP;
+                String serverAddress = LoginActivity.IP;
                 int serverPort = MainActivity.PYTHON_SERVER_PORT;
                 Socket socket = new Socket(serverAddress,serverPort);
                 OutputStream os = socket.getOutputStream();
