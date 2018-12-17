@@ -14,7 +14,13 @@ import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
+import java.net.SocketException;
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class process extends AppCompatActivity {
 
@@ -92,6 +98,8 @@ public class process extends AppCompatActivity {
             Log.i("errorboy", "java.io.IOException");
             b.printStackTrace();
         }
+
         return result;
     }
 }
+

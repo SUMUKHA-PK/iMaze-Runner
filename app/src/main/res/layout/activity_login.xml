@@ -88,13 +88,10 @@
         android:layout_height="63dp"
         android:text="Register here" />
 
-    <EditText
-        android:id="@+id/IP"
+    <Button
+        android:id="@+id/getIPButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Enter IP here..." />
+        android:text="Obtain Server IP" />
 
 </LinearLayout>

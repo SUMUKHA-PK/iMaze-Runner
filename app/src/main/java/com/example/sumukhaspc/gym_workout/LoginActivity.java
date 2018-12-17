@@ -30,11 +30,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     private static final int REQUEST_READ_CONTACTS = 0;
+
+    int ipObtained = 0;
 
     private UserLoginTask mAuthTask = null;
 
@@ -58,9 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
-//        startActivity(intent);
-        // Set up the login form.
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
@@ -79,17 +81,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         Button RegisterButton = (Button) findViewById(R.id.register_button);
 
+        Button getIp = (Button)findViewById(R.id.getIPButton);
+
+        getIp.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        obtainIP();
+                    }
+                });
+                thread.start();
+            }
+        });
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                if(ipObtained==1)
+                    attemptLogin();
+                else{
+                    Toast.makeText(LoginActivity.this,"Get IP of server! Press button below",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         RegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,register.class));
+                if(ipObtained==1)
+                    startActivity(new Intent(LoginActivity.this,register.class));
+                else{
+                    Toast.makeText(LoginActivity.this,"Get IP of server! Press button below",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -97,9 +121,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        EditText get_IP = (EditText)findViewById(R.id.IP);
-
-        IP = get_IP.getText().toString();
     }
 
     private void populateAutoComplete() {
@@ -110,10 +131,53 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
+    public void obtainIP(){
+        String subnet = "192.168.43";
+        try {
+            for (int i=1;i<255;i++){
+                String host=subnet + "." + i;
+                if (isResponse(InetAddress.getByName(host)).equals("true")){
+                    Log.i("errorman",host);
+                    ipObtained=1;
+                    return;
+                }
+            }
         }
+        catch (java.net.UnknownHostException b) {
+            Log.i("blah","blah");
+        }
+    }
+
+    public String isResponse(InetAddress host){
+        String result = "";
+        try {
+            int serverPort = MainActivity.PYTHON_SERVER_PORT;
+            Socket socket = new Socket(host, serverPort);
+            OutputStream os = socket.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            BufferedWriter bw = new BufferedWriter(osw);
+
+            bw.write("ping");
+            bw.flush();
+
+            InputStream is = socket.getInputStream();
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = is.read(buffer)) != -1) {
+                String output = new String(buffer, 0, read);
+                result = output;
+            }
+            socket.close();
+        } catch (java.net.UnknownHostException a) {
+            Log.i("errorboy", "java.net.UnknownHostException");
+            a.printStackTrace();
+        } catch (java.io.IOException b) {
+            Log.i("errorboy", "java.io.IOException");
+            b.printStackTrace();
+        }
+        return result;
+    }
+    private boolean mayRequestContacts() {
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }

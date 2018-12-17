@@ -115,6 +115,22 @@ class ActionThread(threading.Thread):
         self.conn.close()
         cur_threads.remove(self.threadID)
 
+class PingThread(threading.Thread):
+
+    def __init__(self,threadID,name,conn,addr):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.conn = conn
+        self.addr = addr
+
+    def run(self):
+        out = str("true").encode()
+        self.conn.send(out)
+        self.conn.close()
+        cur_threads.remove(self.threadID)
+
+
 def check_dest(data):
     try:
         input = data.decode().split("/0")
@@ -124,6 +140,8 @@ def check_dest(data):
             return "action1"
         elif((input[0]=="action2")):
             return "action2"
+        elif((input[0]=="ping")):
+            return "ping"
     except Exception as e:
         return "file"
 
@@ -139,8 +157,12 @@ def call_thread(threadID,conn,addr):
         files.start()
     elif((result == "action1")|(result=="action2")):
         print("ACTION")
-        action = ActionThread(threadID,"AC",conn,addr,data,result)
+        action = ActionThread(threadID,"AT",conn,addr,data,result)
         action.start()
+    elif(result=="ping"):
+        ping = PingThread(threadID,"PT",conn,addr)
+        ping.start()
+    
 
 def main():
 
