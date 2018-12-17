@@ -13,9 +13,11 @@ This is written in python(just because its easy, wish to write an ERLANG server 
 * The value of the server IP is not hardcoded, it has a feature which allows the client to ping and the server responds so that the client can register a running server.
 <br>
 <br>
+
 **The database :** Is a MySQL database that holds all the registered user credentials. Supports hashed values upto 256 bits. 
 <br>
 <br>
+
 **The frontend application :** 
 <br>
 This is an android application written using JAVA, Android Studio.
@@ -25,6 +27,7 @@ This is an android application written using JAVA, Android Studio.
 * The client app need not have a preset value of Server IP in it but can search for servers in the same subnet. 
 <br>
 <br>
+
 **Future ideas :** <br>
 * Provide hashing of all username and passwords before they even get into the sockets.
 * Add a module of funtionalities (AI and Image Proccessing) that the app can run and provide results for.
