@@ -39,3 +39,16 @@ This is an android application written using JAVA, Android Studio.
 <br>
 <br>
 Disclaimer : This is just a side project undertaken so that I can apply what I've learnt and also explore new things and figure out how servers and other features are implemented in real life.
+
+
+**Dependencies :**<br>
+* Python 3.7.0 or higher
+* MySQL server
+* Android Studio with SDK 28 or higher
+<br>
+
+**Steps to reproduce :**<br>
+* Open Android Studio, File -> Open -> (open the build.gradle of the android app)
+* Connect android device, install app.
+* Connect both devices to a LAN such that both are in the same subnet. (Specify the subnet in the app, in ```obtainIP() -> subnet```)
+* Run ```server.py``` in ```/PyServer``` . 

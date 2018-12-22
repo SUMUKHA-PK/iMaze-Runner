@@ -40,11 +40,8 @@ def authenticate(credentials):
 
     mycursor.execute(query)
 
-    print(query)
     result = mycursor.fetchall()
-
-    print(result)
-    print(type(mycursor.rowcount))
+    
     if(mycursor.rowcount==0):
         return False
     else:

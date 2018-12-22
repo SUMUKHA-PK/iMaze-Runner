@@ -14,8 +14,6 @@ from pathlib import Path
 path_to_script = 'D:\\ACADEMICS\\NTC-1819-MiniProject-16CO145-234\\src\\Analysis'
 sys.path.append(path_to_script)
 
-print(sys.path)
-
 from EAMRSA_Test import script
 
 SERVER_IP="192.168.43.10"
@@ -54,6 +52,7 @@ class FileThread(threading.Thread):
         myfile.close()
 
         self.conn.close()
+        print("Log: Removing thread %d from current thread list" % self.threadID)
         cur_threads.remove(self.threadID)
         
 class LoginRegisterThread(threading.Thread):
@@ -67,15 +66,12 @@ class LoginRegisterThread(threading.Thread):
         self.data = data
 
     def run(self):
-        print("DATA received:\n_____________________")
-        print(self.data)
-        print("_________________________")
         result = self.process()
         out = str(result).encode()
         self.conn.send(out)
-        print(out)
 
         self.conn.close()
+        print("Log: Removing thread %d from current thread list" % self.threadID)
         cur_threads.remove(self.threadID)
         
 
@@ -85,17 +81,23 @@ class LoginRegisterThread(threading.Thread):
             if(credentials[0]=="register"):
                 try:
                     add_cred(credentials)
+                    print("Successfully registered!")
                 except:
                     return False
                 return True
             elif(credentials[0]=="login"):
                 try:
                     result = auth(credentials)
+                    print(result)
+                    if(result=="True"):
+                        print("Logged in successfully")
+                    else:
+                        print("Error in logging in")
                 except:
                     return False
                 return result
         except Exception as e:
-            print("Decoding error in process:",e)
+            print("Exception : Decoding error in process:",e)
 
 class ActionThread(threading.Thread):
 
@@ -109,10 +111,11 @@ class ActionThread(threading.Thread):
         self.result = result
 
     def run(self):
-        print("Action working!")
         if(self.result=="action1"):
+            print("Executing action 1")
             script.runner()
         self.conn.close()
+        print("Log: Removing thread %d from current thread list" % self.threadID)
         cur_threads.remove(self.threadID)
 
 class PingThread(threading.Thread):
@@ -125,9 +128,12 @@ class PingThread(threading.Thread):
         self.addr = addr
 
     def run(self):
+        print("Ping from : ",end=" ")
+        print(self.addr)
         out = str("true").encode()
         self.conn.send(out)
         self.conn.close()
+        print("Log: Removing thread %d from current thread list" % self.threadID)
         cur_threads.remove(self.threadID)
 
 
@@ -182,7 +188,7 @@ def main():
         conn = None
         conn,addr = server_sock.accept()
 
-        print("Connection accepted from : ",end=" ")
+        print("Log: Connection accepted from : ",end=" ")
         print(addr)
 
         if(conn != None):
@@ -190,7 +196,8 @@ def main():
             while thread_no in cur_threads:
                 thread_no = random.randint(1,1000)
             cur_threads.append(thread_no)
-            call_thread(thread_no,conn,addr)    
+            call_thread(thread_no,conn,addr)   
+        print("Log: Thread %d added to current thread list" % thread_no) 
         print(cur_threads)
 
 if __name__ == "__main__":
