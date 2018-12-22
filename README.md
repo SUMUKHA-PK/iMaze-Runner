@@ -1,4 +1,4 @@
-# Android application
+# iMaze Runner
 
 This is not any plain old android application. Its a dash of all the technologies that are necessary to build an app from the ground up, a server, a frontend android application and a backend database to store user credentials.
 <br>
