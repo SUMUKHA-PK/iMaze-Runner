@@ -57,3 +57,5 @@ This is an android application written using JAVA, Android Studio.
 <br>
 
 Disclaimer : This is just a side project undertaken so that I can apply what I've learnt and also explore new things and figure out how servers and other features are implemented in real life.
+<br>
+Why iMaze Runner ? It "runs" images. So image runner + Maze Runner = iMaze Runner :P
