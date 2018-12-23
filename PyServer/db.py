@@ -1,6 +1,7 @@
 import mysql.connector
 
 def add_cred(credentials):
+    # Connects to the database, creats a new entry based on the credentials of the new user
     try:
         print("add_cred called")
         server = mysql.connector.connect(
@@ -24,6 +25,7 @@ def add_cred(credentials):
         print(e)
         
 def authenticate(credentials):
+    # Checks whether such a user exists in the database
     server = mysql.connector.connect(
     host="localhost",
     user="server_db",

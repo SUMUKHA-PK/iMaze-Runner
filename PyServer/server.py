@@ -24,6 +24,7 @@ cur_threads = []
 
 last_file = ""
 
+#Basically each class represents a thread.
 class FileThread(threading.Thread):
     def __init__(self,threadID, name,conn,addr,data):
         threading.Thread.__init__(self)
@@ -34,15 +35,17 @@ class FileThread(threading.Thread):
         self.data = data
 
     def run(self):
+        # Each image file gets a new name based on the current date-time
         print("File transfer begins: ")
         cur_time = str(strftime("%Y-%m-%d %H:%M:%S", gmtime())).replace(" ","_").replace(":","_")
         file_path = "./images/"+cur_time+".png"
-        last_file = file_path
+        last_file = file_path # To process the image(Need a better way based in the time of processing)
         directory = os.path.dirname(file_path)
         if not os.path.exists(directory):
             os.makedirs(directory)
         myfile=open(file_path,'wb')
 
+        # The image is sent in small segments until the mobile device stops sending
         while True:
             if not self.data:
                 break
@@ -76,6 +79,7 @@ class LoginRegisterThread(threading.Thread):
         
 
     def process(self):
+        # Checks what kind of request it needs to serve and routes to appropriate functions
         try:
             credentials = self.data.decode().split("/0")
             if(credentials[0]=="register"):
@@ -111,6 +115,7 @@ class ActionThread(threading.Thread):
         self.result = result
 
     def run(self):
+        # Runs the necessary action based on demand
         if(self.result=="action1"):
             print("Executing action 1")
             script.runner()
@@ -128,6 +133,7 @@ class PingThread(threading.Thread):
         self.addr = addr
 
     def run(self):
+        # Replies back to a ping from the client searching for existance of a server
         print("Ping from : ",end=" ")
         print(self.addr)
         out = str("true").encode()
@@ -138,6 +144,7 @@ class PingThread(threading.Thread):
 
 
 def check_dest(data):
+    # Function that classifies the requests 
     try:
         input = data.decode().split("/0")
         if((input[0]=="register")|(input[0]=="login")):
@@ -153,6 +160,7 @@ def check_dest(data):
 
 
 def call_thread(threadID,conn,addr):
+    # Function that starts the thread based on the requests
     data = conn.recv(SIZE)
     result = check_dest(data)
     if(result == "cred"):
@@ -182,9 +190,11 @@ def main():
     
     server_sock.listen(10)
 
+    # Server is listening all the time for incoming requests
     while True :
         print("Server is listening for incoming connections")
 
+        # Whenever a connection is received, it accepts it and creates a new thread on classifying the job
         conn = None
         conn,addr = server_sock.accept()
 
