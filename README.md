@@ -40,13 +40,15 @@ This is an android application written using JAVA, Android Studio.
 * Python 3.7.0 or higher
 * MySQL server
 * Android Studio with SDK 28 or higher
+* MySQL connector for python3 (```pip install mysql-connector```)
 <br>
 
 **Steps to reproduce :**<br>
+* Clone project by ```git clone https://github.com/SUMUKHA-PK/iMaze-Runner.git```
 * Open Android Studio, File -> Open -> (open the build.gradle of the android app)
 * Connect android device, install app.
 * Connect both devices to a LAN such that both are in the same subnet. (Specify the subnet in the app, in ```obtainIP() -> subnet```)
-* Run ```server.py``` in ```/PyServer``` . 
+* Run ```server.py``` in ```/PyServer``` . (```python3 server.py```)
 <br>
 
 ** Any contributions or ideas that can be implemented are welcome **
