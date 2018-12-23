@@ -21,7 +21,8 @@ This is written in python(just because its easy, wish to write an ERLANG server 
 **The frontend application :** 
 <br>
 This is an android application written using JAVA, Android Studio.
-<br>
+<br>  
+
 **Key features:**
 * This provides clear interfaces to user login, registration, sending images once the user is logged in and also dedicated buttons to run scripts in the server system.
 * The client app need not have a preset value of Server IP in it but can search for servers in the same subnet. 
